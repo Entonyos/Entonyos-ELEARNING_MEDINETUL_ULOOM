@@ -1,0 +1,247 @@
+/* account.css */
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.list-group-item {
+  border-left: 0;
+  border-right: 0;
+}
+
+.list-group-item:first-child {
+  border-top: 0;
+}
+
+.list-group-item:last-child {
+  border-bottom: 0;
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 1.5rem;
+}
+
+.profile {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  margin: 185px auto;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    width: 80%;
+    margin: 90px auto;
+  }
+
+  .profile-info {
+    text-align: left;
+    margin-top: 15px;
+
+    p {
+      margin-bottom: 10px;
+      color: #333;
+
+      strong {
+        color: #8a4baf;
+      }
+    }
+  }
+}
+
+.account-page {
+  min-height: calc(100vh - 180px);
+  padding: var(--spacing-lg) 0;
+  background-color: var(--background-light);
+}
+
+.account-card {
+  background-color: var(--background-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+}
+
+/* Profile Header */
+.profile-header {
+  text-align: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.avatar-container {
+  margin-bottom: var(--spacing-md);
+}
+
+.avatar-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: var(--shadow-sm);
+  margin: 0 auto;
+}
+
+.avatar-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.profile-email {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Profile Options */
+.profile-options {
+  padding: var(--spacing-md) 0;
+}
+
+.profile-option {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-option:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: var(--primary-color);
+}
+
+.option-icon {
+  margin-right: var(--spacing-md);
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.profile-option:hover .option-icon {
+  color: var(--primary-color);
+}
+
+.logout-btn {
+  color: #dc3545;
+}
+
+.logout-btn:hover {
+  background-color: rgba(220, 53, 69, 0.05);
+  color: #dc3545;
+}
+
+/* Subscription Info */
+.subscription-info {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.subscription-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.enrolled-courses {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.enrolled-course {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.enrolled-course:hover {
+  color: var(--primary-color);
+}
+
+.course-name {
+  font-size: 0.9rem;
+}
+
+.view-certificate {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .account-card {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .account-page {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .profile-header {
+    padding: var(--spacing-md);
+  }
+  
+  .profile-option {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment Receipt</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .receipt-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .receipt-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #b4690e, #f0a500);
+            border-radius: 3px;
+        }
+
+        .receipt-header h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .receipt-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .receipt-details {
+            margin: 30px 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .receipt-footer p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #b4690e, #f0a500);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon::before {
+            content: '✓';
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .receipt-container {
+                box-shadow: none;
+            }
+            .action-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="receipt-header">
+            <div class="success-icon"></div>
+            <h1>Enrollment Confirmed</h1>
+            <p>Thank you for enrolling in our course!</p>
+        </div>
+
+        <div class="receipt-details">
+            <div class="detail-row">
+                <span class="label">Student Name</span>
+                <span class="value">{{userName}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Course Title</span>
+                <span class="value">{{courseTitle}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Transaction ID</span>
+                <span class="value">{{transactionId}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Amount Paid</span>
+                <span class="value">{{amount}}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Enrollment Date</span>
+                <span class="value">{{enrollmentDate}}</span>
+            </div>
+        </div>
+
+        <div class="receipt-footer">
+            <p>This is an official receipt for your course enrollment</p>
+            <p>Generated on: {{generationDate}}</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{courseUrl}}" class="btn btn-primary">Go to Course</a>
+            <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+        </div>
+    </div>
+</body>
+</html> 

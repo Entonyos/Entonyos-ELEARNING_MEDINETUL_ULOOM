@@ -1,0 +1,137 @@
+.course-card {
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 250px;
+  transition: 0.5s;
+
+  &:hover {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .course-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+}
+
+.admin-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.edit-btn {
+  background: #2196f3 !important;
+}
+
+.delete-btn {
+  background: #f44336 !important;
+}
+
+.star-rating-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.star-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 20px;
+  cursor: pointer;
+  color: #d1d7dc;
+  transition: all 0.2s ease;
+}
+
+.star.filled {
+  color: #b4690e;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.rating-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.rating-value {
+  font-weight: 700;
+  color: #b4690e;
+}
+
+.rating-count {
+  color: #6a6f73;
+}
+
+.rating-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 10;
+  min-width: 200px;
+}
+
+.star-rating-container:hover .rating-tooltip {
+  display: block;
+}
+
+.rating-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rating-bar {
+  width: 100%;
+  height: 4px;
+  background: #d1d7dc;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.rating-bar-fill {
+  height: 100%;
+  background: #b4690e;
+  transition: width 0.3s ease;
+}
+
+.rating-label {
+  font-size: 0.8rem;
+  color: #6a6f73;
+  text-align: center;
+}

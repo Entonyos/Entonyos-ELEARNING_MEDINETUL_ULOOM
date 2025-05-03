@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: white;
+        }
+        .course-details {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #b4690e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            font-weight: 500;
+        }
+        .button.secondary {
+            background-color: #6c757d;
+        }
+        .button.pdf {
+            background-color: #dc3545;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Course Enrollment Confirmation</h1>
+    </div>
+    <div class="content">
+        <p>Dear {{userName}},</p>
+        <p>Thank you for enrolling in our course! We're excited to have you join us on this learning journey.</p>
+        
+        <div class="course-details">
+            <h2>Course Details</h2>
+            <p><strong>Course Title:</strong> {{courseTitle}}</p>
+            <p><strong>Transaction ID:</strong> {{transactionId}}</p>
+            <p><strong>Amount Paid:</strong> {{amount}}</p>
+            <p><strong>Enrollment Date:</strong> {{enrollmentDate}}</p>
+        </div>
+
+        <p>You can now access your course materials and start learning immediately. Here's what you can do next:</p>
+        <ul>
+            <li>Access your course dashboard</li>
+            <li>Start watching course lectures</li>
+            <li>Download course materials</li>
+            <li>Participate in discussions</li>
+        </ul>
+
+        <div class="action-buttons">
+            <a href="{{courseUrl}}" class="button">Go to Course</a>
+        </div>
+
+        <p>Please find your enrollment receipt attached to this email.</p>
+        <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+        
+        <p>Best regards,<br>The Learning Team</p>
+    </div>
+    <div class="footer">
+        <p>This is an automated message, please do not reply directly to this email.</p>
+    </div>
+
+    <script>
+        // Function to encode the receipt content for download
+        function encodeReceipt() {
+            const receiptContent = document.querySelector('.content').innerHTML;
+            return encodeURIComponent(receiptContent);
+        }
+    </script>
+</body>
+</html> 
