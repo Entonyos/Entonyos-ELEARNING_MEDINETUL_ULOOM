@@ -30,6 +30,18 @@ const AddCourse = () => {
 
   const changeImageHandler = (e) => {
     const file = e.target.files[0];
+    
+    if (!file) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select a valid image file");
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.readAsDataURL(file);
@@ -37,6 +49,10 @@ const AddCourse = () => {
     reader.onloadend = () => {
       setImagePrev(reader.result);
       setImage(file);
+    };
+
+    reader.onerror = () => {
+      toast.error("Error reading the file");
     };
   };
 

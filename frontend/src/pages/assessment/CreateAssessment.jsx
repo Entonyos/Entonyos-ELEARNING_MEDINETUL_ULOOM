@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../config";
 import toast from "react-hot-toast";
@@ -7,54 +7,88 @@ import { FaPlus, FaSave, FaTrash, FaEdit } from "react-icons/fa";
 import "./createAssessment.css";
 
 const CreateAssessment = () => {
-  const { courseId } = useParams();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [timeLimit, setTimeLimit] = useState(60);
-  const [passingScore, setPassingScore] = useState(70);
+  const { id: courseId } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [assessments, setAssessments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [questions, setQuestions] = useState([
-    {
-      question: "",
-      options: ["", "", "", ""],
-      correctAnswer: 0,
-    },
-  ]);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    timeLimit: 30,
+    passingScore: 60,
+    questions: [
+      {
+        question: "",
+        options: ["", "", "", ""],
+        correctAnswer: 0,
+      },
+    ],
+  });
 
   useEffect(() => {
+    if (!courseId) {
+      toast.error("Course ID is missing");
+      navigate("/courses");
+      return;
+    }
     fetchAssessments();
   }, [courseId]);
 
   const fetchAssessments = async () => {
     try {
-      setLoading(true);
-      setError(null);
-      console.log('Fetching assessments for course:', courseId);
-      const response = await axios.get(`${server}/api/assessment/course/${courseId}`, {
-        headers: {
-          token: localStorage.getItem('token')
+      const { data } = await axios.get(
+        `${server}/api/assessment/course/${courseId}`,
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
         }
-      });
-      console.log('API Response:', response.data);
+      );
       
-      if (response.data.success && Array.isArray(response.data.assessments)) {
-        setAssessments(response.data.assessments);
+      if (data.success) {
+        setAssessments(data.assessments || []);
       } else {
-        console.warn('Unexpected response format:', response.data);
+        toast.error(data.message || "Failed to fetch assessments");
         setAssessments([]);
       }
-    } catch (err) {
-      console.error('Error fetching assessments:', err);
-      console.error('Error details:', {
-        status: err.response?.status,
-        data: err.response?.data,
-        message: err.message
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+      console.error("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
       });
-      setError(err.response?.data?.message || 'Failed to fetch assessments');
-      toast.error(err.response?.data?.message || 'Failed to fetch assessments');
+      toast.error(error.response?.data?.message || "Failed to fetch assessments");
       setAssessments([]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      if (!courseId) {
+        throw new Error("Course ID is missing");
+      }
+
+      const { data } = await axios.post(
+        `${server}/api/assessment/course/${courseId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      toast.success("Assessment created successfully");
+      navigate(`/course/${courseId}`);
+    } catch (error) {
+      console.error("Error creating assessment:", error);
+      console.error("Error details:", error.response?.data);
+      toast.error(error.response?.data?.message || "Failed to create assessment");
     } finally {
       setLoading(false);
     }
@@ -97,99 +131,53 @@ const CreateAssessment = () => {
   const handleEdit = (assessment) => {
     if (!assessment) return;
     
-    setTitle(assessment.title || "");
-    setDescription(assessment.description || "");
-    setTimeLimit(assessment.timeLimit || 60);
-    setPassingScore(assessment.passingScore || 70);
-    setQuestions(assessment.questions || [{
-      question: "",
-      options: ["", "", "", ""],
-      correctAnswer: 0,
-    }]);
+    setFormData({
+      title: assessment.title || "",
+      description: assessment.description || "",
+      timeLimit: assessment.timeLimit || 30,
+      passingScore: assessment.passingScore || 60,
+      questions: assessment.questions || [{
+        question: "",
+        options: ["", "", "", ""],
+        correctAnswer: 0,
+      }],
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const addQuestion = () => {
-    setQuestions([
-      ...questions,
-      {
-        question: "",
-        options: ["", "", "", ""],
-        correctAnswer: 0,
-      },
-    ]);
+    setFormData({
+      ...formData,
+      questions: [
+        ...formData.questions,
+        {
+          question: "",
+          options: ["", "", "", ""],
+          correctAnswer: 0,
+        },
+      ],
+    });
   };
 
   const removeQuestion = (index) => {
-    const newQuestions = questions.filter((_, i) => i !== index);
-    setQuestions(newQuestions);
+    const newQuestions = formData.questions.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      questions: newQuestions,
+    });
   };
 
   const updateQuestion = (index, field, value) => {
-    const newQuestions = [...questions];
+    const newQuestions = [...formData.questions];
     if (field === "options") {
       newQuestions[index].options = value;
     } else {
       newQuestions[index][field] = value;
     }
-    setQuestions(newQuestions);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log('Submitting assessment:', {
-        title,
-        description,
-        timeLimit,
-        passingScore,
-        questions
-      });
-      
-      const response = await axios.post(
-        `${server}/api/assessment/course/${courseId}`,
-        {
-          title,
-          description,
-          timeLimit,
-          passingScore,
-          questions,
-        },
-        {
-          headers: {
-            token: localStorage.getItem('token')
-          }
-        }
-      );
-
-      console.log('Create assessment response:', response.data);
-      
-      if (response.data.success) {
-        toast.success('Assessment created successfully');
-        // Reset form
-        setTitle('');
-        setDescription('');
-        setTimeLimit(60);
-        setPassingScore(70);
-        setQuestions([
-          {
-            question: '',
-            options: ['', '', '', ''],
-            correctAnswer: 0,
-          },
-        ]);
-        // Refresh the assessments list
-        await fetchAssessments();
-      }
-    } catch (err) {
-      console.error('Error creating assessment:', err);
-      console.error('Error details:', {
-        status: err.response?.status,
-        data: err.response?.data,
-        message: err.message
-      });
-      toast.error(err.response?.data?.message || 'Failed to create assessment');
-    }
+    setFormData({
+      ...formData,
+      questions: newQuestions,
+    });
   };
 
   return (
@@ -202,8 +190,8 @@ const CreateAssessment = () => {
             <input
               type="text"
               className="form-control"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
               placeholder="Enter assessment title"
             />
@@ -213,8 +201,8 @@ const CreateAssessment = () => {
             <label className="form-label">Description</label>
             <textarea
               className="form-control"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
               placeholder="Enter assessment description"
               rows="3"
@@ -228,8 +216,8 @@ const CreateAssessment = () => {
                 <input
                   type="number"
                   className="form-control"
-                  value={timeLimit}
-                  onChange={(e) => setTimeLimit(Number(e.target.value))}
+                  value={formData.timeLimit}
+                  onChange={(e) => setFormData({ ...formData, timeLimit: Number(e.target.value) })}
                   min="1"
                   required
                 />
@@ -241,8 +229,8 @@ const CreateAssessment = () => {
                 <input
                   type="number"
                   className="form-control"
-                  value={passingScore}
-                  onChange={(e) => setPassingScore(Number(e.target.value))}
+                  value={formData.passingScore}
+                  onChange={(e) => setFormData({ ...formData, passingScore: Number(e.target.value) })}
                   min="0"
                   max="100"
                   required
@@ -253,11 +241,11 @@ const CreateAssessment = () => {
 
           <div className="questions">
             <h3>Questions</h3>
-            {questions.map((q, qIndex) => (
+            {formData.questions.map((q, qIndex) => (
               <div key={qIndex} className="question">
                 <div className="d-flex justify-content-between align-items-center">
                   <h4>Question {qIndex + 1}</h4>
-                  {questions.length > 1 && (
+                  {formData.questions.length > 1 && (
                     <button
                       type="button"
                       className="btn btn-danger btn-sm"
@@ -332,16 +320,6 @@ const CreateAssessment = () => {
         <h3>Created Assessments</h3>
         {loading ? (
           <div className="loading-spinner" />
-        ) : error ? (
-          <div className="error-message">
-            <p>{error}</p>
-            <button 
-              className="btn btn-primary" 
-              onClick={fetchAssessments}
-            >
-              Retry
-            </button>
-          </div>
         ) : !Array.isArray(assessments) || assessments.length === 0 ? (
           <div className="no-assessments">
             <p>No assessments created yet</p>

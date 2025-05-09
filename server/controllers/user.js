@@ -4,6 +4,12 @@ import jwt from "jsonwebtoken";
 import sendMail, { sendForgotMail } from "../middlewares/sendMail.js";
 import TryCatch from "../middlewares/TryCatch.js";
 import path from "path";
+import fs from "fs";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+// Get the directory name in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const register = TryCatch(async (req, res) => {
   const { email, name, password } = req.body;
@@ -20,7 +26,7 @@ export const register = TryCatch(async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   // Create relative path for the image
-  const imagePath = image ? path.join('profiles', image.filename) : null;
+  const imagePath = image ? path.join('uploads/profiles', image.filename) : null;
 
   user = {
     name,
@@ -267,4 +273,57 @@ export const resetPassword = TryCatch(async (req, res) => {
       message: "Failed to reset password. Please try again."
     });
   }
+});
+
+export const updateProfile = TryCatch(async (req, res) => {
+  const { name } = req.body;
+  const image = req.file;
+  
+  // Get user ID from the authenticated request
+  const userId = req.user._id;
+  
+  const user = await User.findById(userId);
+  
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found"
+    });
+  }
+
+  // Update name if provided
+  if (name) {
+    user.name = name;
+  }
+
+  // Update image if provided
+  if (image) {
+    // Delete old image if exists
+    if (user.image) {
+      const oldImagePath = path.join(process.cwd(), 'uploads', 'profiles', user.image);
+      try {
+        if (fs.existsSync(oldImagePath)) {
+          await fs.promises.unlink(oldImagePath);
+        }
+      } catch (error) {
+        console.error("Error deleting old image:", error);
+      }
+    }
+    user.image = image.filename;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      image: user.image,
+      subscription: user.subscription || [],
+    }
+  });
 });

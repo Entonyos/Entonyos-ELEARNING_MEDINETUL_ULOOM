@@ -111,7 +111,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/courses/add"
+              path="/admin/course/add"
               element={
                 isAuth && user?.role === "admin" ? (
                   <AddCourse />
@@ -121,7 +121,7 @@ const App = () => {
               }
             />
             <Route
-              path="/admin/courses/edit/:id"
+              path="/admin/course/edit/:id"
               element={
                 isAuth && user?.role === "admin" ? (
                   <EditCourse />
@@ -141,7 +141,7 @@ const App = () => {
               }
             />
             <Route
-              path="/assessment/create"
+              path="/course/:id/assessment/create"
               element={
                 <ProtectedRoute>
                   <CreateAssessment />
