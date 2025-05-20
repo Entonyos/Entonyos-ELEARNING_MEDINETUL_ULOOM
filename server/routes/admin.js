@@ -29,7 +29,17 @@ router.delete("/lecture/:id", isAuth, isAdmin, deleteLecture);
 
 // User routes
 router.put("/user/:id", isAuth, isAdmin, updateRole);
-router.get("/users", isAuth, isAdmin, getAllUser);
+router.get("/users", isAuth, isAdmin, async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('-password')
+      .populate('subscription', 'title category duration');
+    
+    res.json({ users });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 router.get("/admin/stats", isAuth, isAdmin, getAllStats);
 
 // Revenue calculation endpoint

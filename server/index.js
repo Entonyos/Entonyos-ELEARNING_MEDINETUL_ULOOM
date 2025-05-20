@@ -751,6 +751,9 @@ import adminRoutes from "./routes/admin.js";
 import assessmentRoutes from "./routes/assessmentRoutes.js";
 import certificateRoutes from "./routes/certificateRoutes.js";
 import notificationRoutes from "./routes/notification.js";
+// server/index.js
+import userManagementRouter from './routes/userManagement.js';
+app.use('/api/admin', userManagementRouter);
 
 // Use other routes
 app.use("/api", adminRoutes);
